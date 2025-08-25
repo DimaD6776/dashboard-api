@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import { router } from './users/users.js'
 
 
@@ -11,12 +11,15 @@ app.use((req, res, next) => {
 })
 
 app.get('/hello', (req, res) => {
-    res.send('Hello')
+    throw new Error('Error')
 })
 
 app.use('/users', router)
 
-
+app.use((err: Error, req: Request, res:Response, next:NextFunction) => {
+    console.log(err.message)
+    res.status(401).send(err.message)
+})
 
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`)
